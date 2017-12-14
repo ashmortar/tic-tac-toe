@@ -25,11 +25,6 @@ function addDiag(num){
   sum.push(board.rowA[num] + board.rowB[num + 1] + board.rowC[num + 2]);
   sum.push(board.rowA[num + 2] + board.rowB[num + 1] + board.rowC[num]);
   return sum;
-  // var boardArr = [board.rowA, board.rowB, board.rowC]
-  // var center = (boardArr[Math.floor(boardArr.length/2)])[boardArr[(Math.floor(boardArr.length/2)].length)/2]
-  // for (var k=0;k<boardArr.length;k++){
-  //   sum += (boardArr[k] + center + board[k-])
-  // }
 }
 
 function checkDraw(){
@@ -38,6 +33,12 @@ function checkDraw(){
   }
 }
 
+function launchGame(){
+  game = new Game("player 1", "player 2")
+  // console.log(board.rowA);
+  // console.log(board.rowB);
+  // console.log(board.rowC);
+}
 
 //OBJECT DEFINITIONS------------------
 function Player(name) {
@@ -49,6 +50,7 @@ function Board() {
   this.rowA = [0, 0, 0];
   this.rowB = [0, 0, 0];
   this.rowC = [0, 0, 0];
+  // console.log(this.rowA);
 }
 
 function Game(name1, name2) {
@@ -59,19 +61,23 @@ function Game(name1, name2) {
   this.turn = 1;
 }
 
-board.prototype.move(space){
-  if (space !== 0){
-    return
-  } else if (isOdd(game.turn)){
-    space = 1;
-    board.checkWin();
+Game.prototype.move = function(space) {
+  console.log("move");
+  if (isOdd(this.turn)){
+    //console.log("turn: " + this.turn);
+    this.board[space] = 1;
+    console.log("target: " + this.board[space]);
+    //this.checkWin();
   } else {
-    space = -1;
-    board.checkWin();
+    this.board[space] = -1;
+    //this.checkWin();
   }
+  console.log(this.board.rowA);
+  console.log(this.board.rowB);
+  console.log(this.board.rowC);
 }
 
-board.prototype.checkWin(){
+Game.prototype.checkWin = function(){
   //this runs after a space is assigned but before the turn changes
   var sum = 0;
   var boardArr = [board.rowA, board.rowB, board.rowC]
@@ -88,13 +94,29 @@ board.prototype.checkWin(){
       alert("You Win");
     } else {
       game.turn++
-      console.log("turn: " game.turn);
+      console.log("turn: " + game.turn);
       checkDraw();
     }
   }
 }
 
 //GLOBAL VAIABLES---------------------
-
-
+var game;
 //FRONTEND BELOW THIS LINE----------------------------
+
+$(document).ready(function() {
+  launchGame();
+    $("td").click(function() {
+      var space = eval($(this).attr('id')); //rowA[0]
+      console.log(typeof(space));
+      game.move(space)
+    })
+
+
+
+
+
+
+
+
+})
