@@ -33,13 +33,6 @@ function checkDraw(){
   }
 }
 
-function launchGame(){
-  game = new Game("player 1", "player 2")
-  // console.log(board.rowA);
-  // console.log(board.rowB);
-  // console.log(board.rowC);
-}
-
 //OBJECT DEFINITIONS------------------
 function Player(name) {
   this.name = name;
@@ -61,42 +54,19 @@ function Game(name1, name2) {
   this.turn = 1;
 }
 
-Game.prototype.move = function(space) {
-  console.log("move");
-  if (isOdd(this.turn)){
-    //console.log("turn: " + this.turn);
-    this.board[space] = 1;
-    console.log("target: " + this.board[space]);
-    //this.checkWin();
-  } else {
-    this.board[space] = -1;
-    //this.checkWin();
-  }
-  console.log(this.board.rowA);
-  console.log(this.board.rowB);
-  console.log(this.board.rowC);
-}
-
-Game.prototype.checkWin = function(){
-  //this runs after a space is assigned but before the turn changes
-  var sum = 0;
-  var boardArr = [board.rowA, board.rowB, board.rowC]
-  for (var i = 0; i<boardArr.length; i++){
-    var currBoard = boardArr[i]
-    if(addRow(currBoard) === 3|| addRow(currBoard) === -3){
-      //current player wins
-      alert("You Win");
-    } else if (checkCol(i) === 3 || checkCol(i) === -3){
-      //current player wins
-      alert("You Win");
-    } else if (((checkDiag(i)[0] === 3) || (checkDiag(i)[0] === -3)) || ((checkDiag(i)[1] === 3) || (checkDiag(i)[1] === -3))){
-      //current player wins
-      alert("You Win");
-    } else {
-      game.turn++
-      console.log("turn: " + game.turn);
-      checkDraw();
-    }
+Game.prototype.move = function(xPos, yPos){
+  if (isOdd(game.turn)) {
+    (this.board[xPos])[yPos] = 1;
+    console.log(this.board.rowA);
+    console.log(this.board.rowB);
+    console.log(this.board.rowC);
+    this.turn++;
+  }else {
+    (this.board[xPos])[yPos] = -1;
+    console.log(this.board.rowA);
+    console.log(this.board.rowB);
+    console.log(this.board.rowC);
+    this.turn++;
   }
 }
 
@@ -105,14 +75,6 @@ var game;
 //FRONTEND BELOW THIS LINE----------------------------
 
 $(document).ready(function() {
-  launchGame();
-    $("td").click(function() {
-      var space = eval($(this).attr('id')); //rowA[0]
-      console.log(typeof(space));
-      game.move(space)
-    })
-
-
 
 
 
