@@ -15,7 +15,7 @@ function addDiag(num){
 }
 
 function checkDraw(){
-  if (game.turn > Math.pow(board.length, 2)) {
+  if (game.turn > Math.pow(game.board.rowA.length, 2)) {
     alert("draw");
   }
 }
@@ -41,7 +41,9 @@ function Game(name1, name2) {
   this.turn = 1;
 }
 
-Game.prototype.move = function(xPos, yPos){
+Game.prototype.move = function(arr){
+  var xPos = arr[0]
+  var yPos = arr[1]
   if ((this.board[xPos])[yPos] != 0){
     console.log("taken");
   } else if (isOdd(game.turn)) {
@@ -80,7 +82,7 @@ Game.prototype.checkWin = function() {
     }
   }
 
-  //check for draw HERE
+  checkDraw();
 }
 
 
@@ -90,7 +92,11 @@ var game;
 //FRONTEND BELOW THIS LINE----------------------------
 
 $(document).ready(function() {
-
+  $("td").click(function() {
+    var check = $(this).attr('class').split(" ");
+    console.log(check);
+    game.move(check);
+  })
 
 
 
