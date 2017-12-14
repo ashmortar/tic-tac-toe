@@ -20,6 +20,10 @@ function checkDraw(){
   }
 }
 
+function launchGame(){
+  game = new Game("Player One", "Player Two")
+}
+
 //OBJECT DEFINITIONS------------------
 function Player(name) {
   this.name = name;
@@ -90,12 +94,34 @@ Game.prototype.checkWin = function() {
 //GLOBAL VAIABLES---------------------
 var game;
 //FRONTEND BELOW THIS LINE----------------------------
-
 $(document).ready(function() {
+
+function boardUpdate() {
+  debugger;
+  for (var key in game.board){
+    for (var i = 0; i < key.length-1; i++) {
+      if ((game.board[key])[i] === 1) {
+        $("."+key+"."+i).text("X")
+      } else if ((game.board[key])[i] === -1) {
+        $("."+key+"."+i).text("O")
+      } else if ((game.board[key])[i] === 0){
+        $("."+key+"."+i).text("")
+      } else {
+        console.log("AUTOPIG IS COMING");
+      }
+    }
+  }
+}
+
+
+  launchGame();
   $("td").click(function() {
     var check = $(this).attr('class').split(" ");
     console.log(check);
     game.move(check);
+    boardUpdate();
+
+
   })
 
 
