@@ -9,13 +9,13 @@ function isOdd(num){
 
 function addDiag(num){
   var sum = [];
-  sum.push(game.board.rowA[num] + game.board.rowB[num + 1] + game.board.rowC[num + 2]);
-  sum.push(game.board.rowA[num + 2] + game.board.rowB[num + 1] + game.board.rowC[num]);
+  sum.push(game.board.row1[num] + game.board.row2[num + 1] + game.board.row3[num + 2]);
+  sum.push(game.board.row1[num + 2] + game.board.row2[num + 1] + game.board.row3[num]);
   return sum;
 }
 
 function checkDraw(){
-  if (game.turn > Math.pow(game.board.rowA.length, 2)) {
+  if (game.turn > Math.pow(game.board.row1.length, 2)) {
     alert("draw");
   }
 }
@@ -24,6 +24,33 @@ function launchGame(){
   game = new Game("Player One", "Player Two")
 }
 
+function randomSpace() {
+  var yPos = "row" + Math.floor(3*Math.random()+1).toString();
+  var xPos = Math.floor(3*Math.random());
+  console.log(yPos, xPos);
+  var array = [yPos, xPos];
+  var move = game.move(array);
+  if (move === "taken"){
+    randomSpace()
+  }
+  game.move(array);
+}
+
+// function autoPig(){
+//   if (game.turn === 2) {
+//     //take a random position
+//   } else if (/*check for 2 in a row*/){
+//     //move in that row/column/diag
+//     if(/*fork, pick one at random*/)
+//   } else if(/*check for -2 */){
+//     //win
+//   } else if(/*center is available*/) {
+//     //take it
+//   } else {
+//     //take a random move
+//   }
+// }
+
 //OBJECT DEFINITIONS------------------
 function Player(name) {
   this.name = name;
@@ -31,10 +58,10 @@ function Player(name) {
 }
 
 function Board() {
-  this.rowA = [0, 0, 0];
-  this.rowB = [0, 0, 0];
-  this.rowC = [0, 0, 0];
-  // console.log(this.rowA);
+  this.row1 = [0, 0, 0];
+  this.row2 = [0, 0, 0];
+  this.row3 = [0, 0, 0];
+  // console.log(this.row1);
 }
 
 function Game(name1, name2) {
@@ -46,22 +73,23 @@ function Game(name1, name2) {
 }
 
 Game.prototype.move = function(arr){
-  var xPos = arr[0]
-  var yPos = arr[1]
-  if ((this.board[xPos])[yPos] != 0){
+  var yPos = arr[0]
+  var xPos = arr[1]
+  if ((this.board[yPos])[xPos] != 0){
     console.log("taken");
+    return "taken";
   } else if (isOdd(game.turn)) {
-    (this.board[xPos])[yPos] = 1;
-    console.log(this.board.rowA);
-    console.log(this.board.rowB);
-    console.log(this.board.rowC);
+    (this.board[yPos])[xPos] = 1;
+    console.log(this.board.row1);
+    console.log(this.board.row2);
+    console.log(this.board.row3);
     this.turn++;
     game.checkWin();
   } else if (isOdd(game.turn) === false) {
-    (this.board[xPos])[yPos] = -1;
-    console.log(this.board.rowA);
-    console.log(this.board.rowB);
-    console.log(this.board.rowC);
+    (this.board[yPos])[xPos] = -1;
+    console.log(this.board.row1);
+    console.log(this.board.row2);
+    console.log(this.board.row3);
     this.turn++;
     game.checkWin();
   } else {
@@ -70,17 +98,17 @@ Game.prototype.move = function(arr){
 }
 
 Game.prototype.checkWin = function() {
-  var boardState = [this.board.rowA, this.board.rowB, this.board.rowC];
+  var boardState = [this.board.row1, this.board.row2, this.board.row3];
   for (var i = 0;i<boardState.length;i++){
     var row = boardState[i];
-    var col = [this.board.rowA[i], this.board.rowB[i], this.board.rowC[i]];
+    var col = [this.board.row1[i], this.board.row2[i], this.board.row3[i]];
 
     if (row[0]+row[1]+row[2] === 3 || row[0]+row[1]+row[2] === -3){
-      console.log("you win!");
+      alert("you win!");
     } else if(col[0]+col[1]+col[2] === 3 || col[0]+col[1]+col[2] === -3) {
-      console.log("you win!")
+      alert("you win!")
     } else if(addDiag(i)[0] === 3 || addDiag(i)[1] === 3 || addDiag(i)[0] === -3 || addDiag(i)[1] === -3) {
-      console.log("you win!")
+      alert("you win!")
     } else {
       //continue
     }
@@ -97,7 +125,7 @@ var game;
 $(document).ready(function() {
 
 function boardUpdate() {
-  debugger;
+  //debugger;
   for (var key in game.board){
     for (var i = 0; i < key.length-1; i++) {
       if ((game.board[key])[i] === 1) {
@@ -113,19 +141,16 @@ function boardUpdate() {
   }
 }
 
-
   launchGame();
   $("td").click(function() {
     var check = $(this).attr('class').split(" ");
     console.log(check);
     game.move(check);
     boardUpdate();
-
-
   })
 
-
-
-
-
+  $("#reset").click(function() {
+    launchGame();
+    boardUpdate();
+  })
 })
