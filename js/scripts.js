@@ -7,23 +7,10 @@ function isOdd(num){
   }
 }
 
-function addRow(arr){
-  var sum = 0;
-  for (var j=0;j<arr.length;j++){
-    sum+= arr[j];
-  }
-  return sum;
-}
-
-function addCol(num){
-  var sum = board.rowA[num] + board.rowB[num] + board.rowC[num];
-  return sum
-}
-
 function addDiag(num){
   var sum = [];
-  sum.push(board.rowA[num] + board.rowB[num + 1] + board.rowC[num + 2]);
-  sum.push(board.rowA[num + 2] + board.rowB[num + 1] + board.rowC[num]);
+  sum.push(game.board.rowA[num] + game.board.rowB[num + 1] + game.board.rowC[num + 2]);
+  sum.push(game.board.rowA[num + 2] + game.board.rowB[num + 1] + game.board.rowC[num]);
   return sum;
 }
 
@@ -55,20 +42,48 @@ function Game(name1, name2) {
 }
 
 Game.prototype.move = function(xPos, yPos){
-  if (isOdd(game.turn)) {
+  if ((this.board[xPos])[yPos] != 0){
+    console.log("taken");
+  } else if (isOdd(game.turn)) {
     (this.board[xPos])[yPos] = 1;
     console.log(this.board.rowA);
     console.log(this.board.rowB);
     console.log(this.board.rowC);
     this.turn++;
-  }else {
+    game.checkWin();
+  } else if (isOdd(game.turn) === false) {
     (this.board[xPos])[yPos] = -1;
     console.log(this.board.rowA);
     console.log(this.board.rowB);
     console.log(this.board.rowC);
     this.turn++;
+    game.checkWin();
+  } else {
+    console.log("AUTOPIG IS DISPLEASED");
   }
 }
+
+Game.prototype.checkWin = function() {
+  var boardState = [this.board.rowA, this.board.rowB, this.board.rowC];
+  for (var i = 0;i<boardState.length;i++){
+    var row = boardState[i];
+    var col = [this.board.rowA[i], this.board.rowB[i], this.board.rowC[i]];
+
+    if (row[0]+row[1]+row[2] === 3 || row[0]+row[1]+row[2] === -3){
+      console.log("you win!");
+    } else if(col[0]+col[1]+col[2] === 3 || col[0]+col[1]+col[2] === -3) {
+      console.log("you win!")
+    } else if(addDiag(i)[0] === 3 || addDiag(i)[1] === 3 || addDiag(i)[0] === -3 || addDiag(i)[1] === -3) {
+      console.log("you win!")
+    } else {
+      //continue
+    }
+  }
+
+  //check for draw HERE
+}
+
+
 
 //GLOBAL VAIABLES---------------------
 var game;
