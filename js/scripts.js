@@ -65,17 +65,17 @@ function checkAlmost() {
   if(diagRight[1]+diagRight[3]+diagRight[5] === 2 || diagRight[1]+diagRight[3]+diagRight[5] === -2) {
     for (var n = 1; n < diagRight.length; n += 2) {
       if (diagRight[n] === 0) {
-        return [diagRight[n-1], diagRight[n]];
+        return [diagRight[n-1], (Math.floor(diagRight[n]/2)) ];
       }
     }
   } else if(diagLeft[1]+diagLeft[3]+diagLeft[5] === 2 || diagLeft[1]+diagLeft[3]+diagLeft[5] === -2) {
     for (var o = 1; o < diagLeft.length; o += 2) {
       if (diagLeft[o] === 0) {
-        return [diagLeft[o-1], diagLeft[o]];
+        return [diagLeft[o-1], (Math.floor(diagLeft[o] / 2))];
       }
     }
   }
-  //console.log(result);
+  console.log(result);
   return result;
 }
 
